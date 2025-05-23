@@ -6,13 +6,13 @@ class RenderView
     {
         extract($args);
 
-        $viewFile = __DIR__ . "/../Views/$view.php";
+        $viewFile = __DIR__ . "/../../views/$view.php";
 
         if (file_exists($viewFile)) {
             require_once $viewFile;
         } else {
             $msgError = "A View ($view) definida no controller não foi encontrada.";
-            require_once __DIR__ . "/../404.php";
+            require_once __DIR__ . "/../../404.php";
         };
     }
 }
