@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/app/Core/Core.php';
+require_once __DIR__ . '/app/Models/Database/Database.php';
 require_once __DIR__ . '/routes/web.php';
 
 spl_autoload_register(function ($file) {
