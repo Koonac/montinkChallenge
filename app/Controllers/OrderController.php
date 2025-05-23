@@ -2,8 +2,10 @@
 
 class OrderController extends RenderView
 {
-    public function index($params)
+    public function index()
     {
-        print_r($params);
+        $this->loadView('orders', [
+            'title' => 'Pedidos'
+        ]);
     }
 }

@@ -12,9 +12,11 @@ class Database
             $pass = getenv('DB_PASS');
 
             $pdo = new PDO("mysql:dbname=$name;host=$host", $user, $pass);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $pdo;
         } catch (PDOException $err) {
-            //throw $th;
+            echo 'Ocorreu um erro inesperado. ';
+            echo $err->getMessage();
         }
     }
 }

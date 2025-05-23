@@ -19,7 +19,7 @@ class Core
     {
         $url = '/';
 
-        isset($_GET['url']) ? $url .= $_GET['url'] : '';
+        isset($_GET['url']) ? $url .= rtrim($_GET['url'], '/') : '';
 
         foreach ($routes as $route => $handler) {
             // Extrai os nomes dos parâmetros
