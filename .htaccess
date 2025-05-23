@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# Bloquear acesso direto a arquivos PHP dentro de /Core, /Controllers, etc.
+RewriteRule ^(Core|Controllers|Models|Router)/.*\.php$ - [F,L]
+
+# Ignorar arquivos e diretórios existentes
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Redirecionar tudo para index.php
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
