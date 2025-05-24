@@ -8,8 +8,10 @@ $routesWeb = [
         '/produtos/{id}' => 'ProductController@show',
         '/pedidos' => 'OrderController@index',
         '/pedidos/{id}' => 'OrderController@index',
+        '/loja' => 'StoreController@index',
     ],
     'POST' => [
+        '/carrinho/adicionar' => 'StoreController@addProductCart',
         '/produtos' => 'ProductController@store',
         '/produtos/{id}/atualizar' => 'ProductController@update',
     ],

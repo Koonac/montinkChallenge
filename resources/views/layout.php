@@ -39,10 +39,14 @@
                         <a class="nav-link <?= str_contains(Router::getPath(), 'produtos') ? 'active' : '' ?>" href="<?= Router::baseUrl('/produtos') ?>">Produtos</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link <?= str_contains(Router::getPath(), 'loja') ? 'active' : '' ?>" href="<?= Router::baseUrl('/loja') ?>">Loja</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link <?= str_contains(Router::getPath(), 'pedidos') ? 'active' : '' ?>" href="<?= Router::baseUrl('/pedidos') ?>">Pedidos</a>
                     </li>
                 </ul>
             </div>
+            <button type="button" class="btn btn-outline-primary"><i class="bi bi-cart-fill"></i></button>
         </div>
     </nav>
 

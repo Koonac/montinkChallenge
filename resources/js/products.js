@@ -12,9 +12,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Evento click para preenchimento de uma nova variação
-    document.getElementById('product-new-variation').addEventListener('click', () => {
-        addInputVariation('variation-container')
-    });
+    if(document.getElementById('product-new-variation')){
+        document.getElementById('product-new-variation').addEventListener('click', () => {
+            addInputVariation('variation-container')
+        });
+    }
 });
 
 function deleteProduct(productId){
@@ -29,6 +31,9 @@ function deleteProduct(productId){
     })
     .then(data => {
         console.log('Recurso deletado com sucesso:', data);
+
+        // REMOVENDO DIV
+        document.getElementById('div-product-' + productId).remove();
     })
     .catch(error => {
         console.error('Erro:', error);

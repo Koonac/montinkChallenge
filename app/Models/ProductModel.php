@@ -19,7 +19,7 @@ class ProductModel extends Database
     }
 
     /**
-     * Retorna todos os registros da tabela
+     * Retorna uma lista de produtos
      * 
      * @return array
      */
@@ -37,6 +37,36 @@ class ProductModel extends Database
         INNER JOIN stocks ON products.id = stocks.product_id
         WHERE
         products.is_variation = false;';
+
+        $stmt = $this->pdo->query($sql);
+        if ($stmt->rowCount() > 0) {
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * Retorna uma lista de produtos para venda na loja
+     * 
+     * @return array
+     */
+    public function allStore(): array
+    {
+        $sql = 'SELECT 
+        products.id, 
+        products.name,
+        CONCAT(parents_products.name, " - ", products.name) as full_name,
+        products.description, 
+        products.price, 
+        stocks.quantity
+        FROM 
+        products
+        INNER JOIN stocks ON products.id = stocks.product_id
+        LEFT JOIN variations ON products.id = variations.variation_id
+        LEFT JOIN products AS parents_products ON variations.parent_product_id = parents_products.id
+        WHERE
+        NOT EXISTS (SELECT 1 FROM variations WHERE variations.parent_product_id = products.id);';
 
         $stmt = $this->pdo->query($sql);
         if ($stmt->rowCount() > 0) {

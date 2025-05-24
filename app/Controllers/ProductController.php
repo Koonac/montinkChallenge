@@ -19,7 +19,7 @@ class ProductController extends RenderView
     /**
      * Exibe os detalhes de um produto específico.
      *
-     * @param int $id
+     * @param $request
      * @return void
      */
     public function show($request)
@@ -67,17 +67,9 @@ class ProductController extends RenderView
     }
 
     /**
-     * Exibe o formulário de edição de um produto existente.
-     *
-     * @param int $id ID do produto
-     * @return void
-     */
-    public function edit($id) {}
-
-    /**
      * Processa a edição e atualiza os dados do produto no banco.
      *
-     * @param int $id ID do produto
+     * @param $request
      * @return void
      */
     public function update($request)
