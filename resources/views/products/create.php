@@ -1,5 +1,10 @@
 <div class="container-fluid">
-
+    <?php
+    if (isset($data) && !$data['status']) {
+        print_r($data['message']);
+        print_r($data['error']);
+    }
+    ?>
     <h1>Criando produto</h1>
 
     <form class="row g-3" action="<?= Router::baseUrl('/produtos') ?>" method="post">

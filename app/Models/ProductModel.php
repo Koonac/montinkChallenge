@@ -3,13 +3,38 @@
 class ProductModel extends Database
 {
     /**
+     * Contém a instância do pdo
+     * 
+     * @var object $pdo
+     */
+    private $pdo;
+
+    /**
+     * ProductModel Constructor
+     * 
+     */
+    public function __construct()
+    {
+        $this->pdo = $this->connect();
+    }
+
+    /**
      * Retorna todos os registros da tabela
      * 
      * @return array
      */
     public function all(): array
     {
-        $stmt = $this->connect()->query('SELECT * FROM products');
+        $sql = 'SELECT 
+        products.name, 
+        products.description, 
+        products.price, 
+        stocks.quantity
+        FROM 
+        products
+        INNER JOIN stocks ON products.id = stocks.product_id;';
+
+        $stmt = $this->pdo->query($sql);
         if ($stmt->rowCount() > 0) {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } else {
@@ -25,7 +50,9 @@ class ProductModel extends Database
      */
     public function get($id): array
     {
-        $stmt = $this->connect()->query("SELECT * FROM products WHERE id = $id");
+        $sql = "SELECT * FROM products WHERE id = $id";
+
+        $stmt = $this->pdo->query($sql);
         if ($stmt->rowCount() > 0) {
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } else {
@@ -44,18 +71,18 @@ class ProductModel extends Database
         $sql = 'INSERT INTO products 
         (name, description, price)
         VALUES
-        (:nome, :description, :price);';
+        (:name, :description, :price);';
 
-        $stmt = $this->connect()->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute([
-            ':nome'         => $attributes['nome'],
+            ':name'         => $attributes['name'],
             ':description'  => $attributes['description'],
             ':price'        => $attributes['price'],
         ]);
 
         return [
-            'id' => $this->connect()->lastInsertId(),
+            'id' => $this->pdo->lastInsertId(),
             'message' => 'Produto criado com sucesso.'
         ];
     }
@@ -76,7 +103,7 @@ class ProductModel extends Database
         WHERE
         (id = :id);';
 
-        $stmt = $this->connect()->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute([
             ':id'           => $id,
@@ -102,7 +129,7 @@ class ProductModel extends Database
         FROM products 
         WHERE (id = :id);';
 
-        $stmt = $this->connect()->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute([
             ':id' => $id

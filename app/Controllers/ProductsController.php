@@ -12,10 +12,9 @@ class ProductsController extends RenderView
     public function index()
     {
         $products = new ProductModel;
-
         $this->loadView('products/index', [
-            'title' => 'Produtos',
-            'products' => $products->all()
+            'title'     => 'Produtos',
+            'products'  => Helpers::listToCamelCase($products->all())
         ]);
     }
 
@@ -52,7 +51,17 @@ class ProductsController extends RenderView
         $form = $_POST;
 
         $product = new ProductUseCase;
-        $product->create($form);
+        $data = $product->create($form);
+
+        if ($data['status']) {
+            header("Location: " . Router::baseUrl('/produtos'));
+            exit;
+        }
+
+        $this->loadView('products/create', [
+            'title' => 'Criar um produto',
+            'data'  => $data
+        ]);
     }
 
     /**

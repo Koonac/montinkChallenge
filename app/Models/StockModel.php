@@ -2,6 +2,21 @@
 
 class StockModel extends Database
 {
+    /**
+     * Contém a instância do pdo
+     * 
+     * @var object $pdo
+     */
+    private $pdo;
+
+    /**
+     * ProductModel Constructor
+     * 
+     */
+    public function __construct()
+    {
+        $this->pdo = $this->connect();
+    }
 
     /**
      * Cria um estoque
@@ -16,7 +31,7 @@ class StockModel extends Database
         VALUES
         (:productId, :quantity);';
 
-        $stmt = $this->connect()->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute([
             ':productId'    => $attributes['productId'],
@@ -24,7 +39,7 @@ class StockModel extends Database
         ]);
 
         return [
-            'id' => $this->connect()->lastInsertId(),
+            'id' => $this->pdo->lastInsertId(),
             'message' => 'Estoque criado com sucesso.'
         ];
     }
@@ -43,7 +58,7 @@ class StockModel extends Database
         WHERE
         (id = :id);';
 
-        $stmt = $this->connect()->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute([
             ':id'       => $id,

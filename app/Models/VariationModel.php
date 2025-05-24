@@ -3,6 +3,22 @@
 class VariationModel extends Database
 {
     /**
+     * Contém a instância do pdo
+     * 
+     * @var object $pdo
+     */
+    private $pdo;
+
+    /**
+     * ProductModel Constructor
+     * 
+     */
+    public function __construct()
+    {
+        $this->pdo = $this->connect();
+    }
+
+    /**
      * Retorna toas as variações de um produto
      * 
      * @param $productId
@@ -12,7 +28,7 @@ class VariationModel extends Database
     {
         $sql = "";
 
-        $stmt = $this->connect()->query($sql);
+        $stmt = $this->pdo->query($sql);
         if ($stmt->rowCount() > 0) {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } else {
@@ -30,7 +46,7 @@ class VariationModel extends Database
     {
         $sql = "";
 
-        $stmt = $this->connect()->query($sql);
+        $stmt = $this->pdo->query($sql);
         if ($stmt->rowCount() > 0) {
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } else {
@@ -51,7 +67,7 @@ class VariationModel extends Database
         VALUES
         (:parentProductId, :variationId);';
 
-        $stmt = $this->connect()->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute([
             ':parentProductId'  => $attributes['parentProductId'],
@@ -59,7 +75,7 @@ class VariationModel extends Database
         ]);
 
         return [
-            'id' => $this->connect()->lastInsertId(),
+            'id' => $this->pdo->lastInsertId(),
             'message' => 'Variação criada com sucesso.'
         ];
     }
