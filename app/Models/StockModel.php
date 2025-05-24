@@ -47,22 +47,22 @@ class StockModel extends Database
     /**
      * Atualiza um estoque
      * 
-     * @param $id
+     * @param $productId
      * @param $attributes
      * @return array
      */
-    public function update($id, $attributes): array
+    public function updateByProduct($productId, $attributes): array
     {
         $sql = 'UPDATE stocks SET 
         quantity = :quantity
         WHERE
-        (id = :id);';
+        (product_id = :productId);';
 
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute([
-            ':id'       => $id,
-            ':quantity' => $attributes['quantity'],
+            ':productId'    => $productId,
+            ':quantity'     => $attributes['quantity'],
         ]);
 
         return [

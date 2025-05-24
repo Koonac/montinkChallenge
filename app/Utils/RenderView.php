@@ -2,6 +2,13 @@
 
 class RenderView
 {
+    /**
+     * Carrega a view
+     * 
+     * @param string @view
+     * @param array @args
+     * @return void
+     */
     public function loadView($view, $args = [])
     {
         extract($args);

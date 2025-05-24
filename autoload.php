@@ -15,8 +15,23 @@ spl_autoload_register(function ($file) {
         require_once __DIR__ . "/app/Utils/$file.php";
     }
 
-    // Arquivos models da aplicação
-    // if (file_exists(__DIR__ . "/app/Models/$file.php")) {
-    //     require_once __DIR__ . "/app/Models/$file.php";
-    // }
+    // Arquivos Models da aplicação
+    if (file_exists(__DIR__ . "/app/Models/$file.php")) {
+        require_once __DIR__ . "/app/Models/$file.php";
+    }
+
+    // Arquivos UseCase da aplicação
+    if (file_exists(__DIR__ . "/app/UseCase/$file.php")) {
+        require_once __DIR__ . "/app/UseCase/$file.php";
+    }
 });
+
+function printDie(...$list)
+{
+    print '<pre>';
+    foreach ($list as $l) {
+        print_r($l);
+        print '<br>';
+    }
+    die;
+}

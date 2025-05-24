@@ -26,13 +26,17 @@ class ProductModel extends Database
     public function all(): array
     {
         $sql = 'SELECT 
+        products.id, 
         products.name, 
         products.description, 
         products.price, 
-        stocks.quantity
+        stocks.quantity,
+        (SELECT COUNT(id) FROM variations WHERE products.id = variations.parent_product_id) AS quantity_variations
         FROM 
         products
-        INNER JOIN stocks ON products.id = stocks.product_id;';
+        INNER JOIN stocks ON products.id = stocks.product_id
+        WHERE
+        products.is_variation = false;';
 
         $stmt = $this->pdo->query($sql);
         if ($stmt->rowCount() > 0) {
@@ -43,18 +47,62 @@ class ProductModel extends Database
     }
 
     /**
-     * Retorna todos os registros da tabela
+     * Retorna um produto
      * 
      * @param $id
      * @return array
      */
-    public function get($id): array
+    public function find($id): array
     {
-        $sql = "SELECT * FROM products WHERE id = $id";
+        $sql = "SELECT 
+        products.id, 
+        products.name, 
+        products.description, 
+        products.price
+        FROM 
+        products 
+        WHERE 
+        products.id = $id";
 
         $stmt = $this->pdo->query($sql);
         if ($stmt->rowCount() > 0) {
             return $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * Retorna um produto com variações
+     * 
+     * @param $id
+     * @return array
+     */
+    public function getWithVariations($id): array
+    {
+        $sql = "SELECT 
+        products.id, 
+        products.name, 
+        products.description, 
+        products.price, 
+        stocks.quantity
+        FROM 
+        products 
+        INNER JOIN stocks ON products.id = stocks.product_id
+        WHERE 
+        products.id = $id";
+
+        $stmt = $this->pdo->query($sql);
+        if ($stmt->rowCount() > 0) {
+            $product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $variationModel = new VariationModel;
+            $variations = $variationModel->allByProduct($id);
+
+            return [
+                ...$product,
+                'variations' => $variations
+            ];
         } else {
             return [];
         }
@@ -69,16 +117,17 @@ class ProductModel extends Database
     public function create($attributes): array
     {
         $sql = 'INSERT INTO products 
-        (name, description, price)
+        (name, description, price, is_variation)
         VALUES
-        (:name, :description, :price);';
+        (:name, :description, :price, :isVariation);';
 
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute([
             ':name'         => $attributes['name'],
-            ':description'  => $attributes['description'],
-            ':price'        => $attributes['price'],
+            ':description'  => $attributes['description'] ?? null,
+            ':price'        => $attributes['price'] ?? 0,
+            ':isVariation'  => $attributes['isVariation'] ?? false,
         ]);
 
         return [

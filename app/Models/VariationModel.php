@@ -26,7 +26,18 @@ class VariationModel extends Database
      */
     public function allByProduct($productId): array
     {
-        $sql = "";
+        $sql = "SELECT
+        products_variations.id, 
+        products_variations.name, 
+        products_variations.description, 
+        products_variations.price, 
+        stocks.quantity
+        FROM 
+        variations
+        INNER JOIN products AS products_variations ON variations.variation_id = products_variations.id
+        INNER JOIN stocks ON products_variations.id = stocks.product_id
+        WHERE
+        variations.parent_product_id = $productId;";
 
         $stmt = $this->pdo->query($sql);
         if ($stmt->rowCount() > 0) {
@@ -42,7 +53,7 @@ class VariationModel extends Database
      * @param $id
      * @return array
      */
-    public function get($id): array
+    public function find($id): array
     {
         $sql = "";
 

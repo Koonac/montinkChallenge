@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../UseCase/ProductUseCase.php';
-
 class ProductsController extends RenderView
 {
     /**
@@ -11,10 +9,10 @@ class ProductsController extends RenderView
      */
     public function index()
     {
-        $products = new ProductModel;
+        $productModel = new ProductModel;
         $this->loadView('products/index', [
             'title'     => 'Produtos',
-            'products'  => Helpers::listToCamelCase($products->all())
+            'products'  => Helpers::listToCamelCase($productModel->all())
         ]);
     }
 
@@ -24,9 +22,13 @@ class ProductsController extends RenderView
      * @param int $id
      * @return void
      */
-    public function show($id)
+    public function show($request)
     {
-        // Lógica para buscar um produto pelo ID e exibir seus detalhes
+        $productModel = new ProductModel;
+        $this->loadView('products/edit', [
+            'title'     => 'Editando um produto',
+            'product'   => Helpers::keysToCamelCase($productModel->getWithVariations($request['id']))
+        ]);
     }
 
     /**
@@ -70,10 +72,7 @@ class ProductsController extends RenderView
      * @param int $id ID do produto
      * @return void
      */
-    public function edit($id)
-    {
-        // Lógica para buscar o produto e exibir o formulário preenchido
-    }
+    public function edit($id) {}
 
     /**
      * Processa a edição e atualiza os dados do produto no banco.
@@ -81,9 +80,14 @@ class ProductsController extends RenderView
      * @param int $id ID do produto
      * @return void
      */
-    public function update($id)
+    public function update($request)
     {
-        // Lógica para atualizar o produto com os dados enviados via POST
+        $form = $_POST;
+
+        $product = new ProductUseCase;
+        $data = $product->update($request['id'], $form);
+
+        header("Location: " . Router::baseUrl('/produtos/' . $request['id']));
     }
 
     /**
