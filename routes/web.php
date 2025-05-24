@@ -3,15 +3,18 @@
 $routesWeb = [
     'GET' => [
         '/' => 'HomeController@index',
-        '/produtos' => 'ProductsController@index',
-        '/produtos/criar' => 'ProductsController@create',
-        '/produtos/{id}' => 'ProductsController@show',
+        '/produtos' => 'ProductController@index',
+        '/produtos/criar' => 'ProductController@create',
+        '/produtos/{id}' => 'ProductController@show',
         '/pedidos' => 'OrderController@index',
         '/pedidos/{id}' => 'OrderController@index',
     ],
     'POST' => [
-        '/produtos' => 'ProductsController@store',
-        '/produtos/{id}/atualizar' => 'ProductsController@update',
-        '/produtos/{id}/deletar' => 'ProductsController@delete',
+        '/produtos' => 'ProductController@store',
+        '/produtos/{id}/atualizar' => 'ProductController@update',
+    ],
+    'DELETE' => [
+        '/produtos/{id}' => 'ProductController@delete',
+        '/variacao/{variationId}' => 'VariationController@delete',
     ],
 ];

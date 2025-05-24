@@ -156,7 +156,7 @@ class ProductModel extends Database
 
         $stmt->execute([
             ':id'           => $id,
-            ':nome'         => $attributes['nome'],
+            ':name'         => $attributes['name'],
             ':description'  => $attributes['description'],
             ':price'        => $attributes['price'],
         ]);
@@ -185,7 +185,7 @@ class ProductModel extends Database
         ]);
 
         return [
-            'message' => 'Produto atualizado com sucesso.'
+            'message' => 'Produto deletado com sucesso.'
         ];
     }
 }

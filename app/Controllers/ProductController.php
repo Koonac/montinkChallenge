@@ -1,6 +1,6 @@
 <?php
 
-class ProductsController extends RenderView
+class ProductController extends RenderView
 {
     /**
      * Exibe a lista de produtos.
@@ -93,11 +93,12 @@ class ProductsController extends RenderView
     /**
      * Remove um produto do banco de dados.
      *
-     * @param int $id ID do produto
-     * @return void
+     * @param $request
+     * @return json
      */
-    public function delete($id)
+    public function delete($request)
     {
-        // Lógica para deletar o produto pelo ID
+        $productUseCase = new ProductUseCase;
+        echo json_encode($productUseCase->delete($request['id']));
     }
 }

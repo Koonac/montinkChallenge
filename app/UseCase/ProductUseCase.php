@@ -53,7 +53,7 @@ class ProductUseCase
         try {
             $productModel = new ProductModel;
             $productModel->update($productId, [
-                'nome'          => $attributes['nome'],
+                'name'          => $attributes['name'],
                 'description'   => $attributes['description'],
                 'price'         => $attributes['price'],
             ]);
@@ -63,32 +63,26 @@ class ProductUseCase
                 'quantity'  => $attributes['quantity']
             ]);
 
-            // EDITANDO VARIAÇÕES
-            /*
-            
-            
-            
-            
-            ALTERAR O PREÇO TAMBÉM
-
-
-            
-            */
+            /* EDITANDO AS VARIAÇÕES EXISTENTES */
             if (isset($attributes['variations_edit']) && !empty($attributes['variations_edit'])) {
-                foreach ($attributes['variations_edit'] as $variationId => $value) {
-                    # code...
+                foreach ($attributes['variations_edit'] as $variationId => $variationName) {
+                    $variations[] = [
+                        'variationId' => $variationId,
+                        'name' => $variationName,
+                        'price' => $attributes['variations_price'][$variationId],
+                        'quantity' => $attributes['variations_stock'][$variationId],
+                    ];
                 }
-            }
 
-            // ALTERANDO ESTOQUE DE VARIAÇÕES
-            if (isset($attributes['stock_variations']) && !empty($attributes['stock_variations'])) {
-            }
-
-            // CRIANDO NOVAS VARIAÇõES
-            if (isset($attributes['variations']) && !empty($attributes['variations'])) {
-                $variations = array_map(fn($v) => ['name' => $v, 'price' => $attributes['price']], $attributes['variations']);
                 $variationUseCase = new VariationUseCase;
-                $variationUseCase->createMany($productId, $variations);
+                $variationUseCase->updateMany($variations);
+            }
+
+            /* CRIANDO NOVAS VARIAÇõES */
+            if (isset($attributes['variations']) && !empty($attributes['variations'])) {
+                $newVariations = array_map(fn($v) => ['name' => $v, 'price' => $attributes['price']], $attributes['variations']);
+                $variationUseCase = new VariationUseCase;
+                $variationUseCase->createMany($productId, $newVariations);
             }
 
             return [
@@ -96,10 +90,35 @@ class ProductUseCase
                 'message'   => 'Produto atualizado com sucesso.',
             ];
         } catch (Exception $e) {
-            if (isset($productId) && !empty($productId)) $productModel->delete($productId);
             return [
                 'status'    => false,
                 'message'   => 'Falha ao atualizar um produto',
+                'code'      => $e->getCode(),
+                'error'     => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Deleta um produto 
+     * 
+     * @param $id
+     * @return array
+     */
+    public function delete($id)
+    {
+        try {
+            $productModel = new ProductModel;
+            $productModel->delete($id);
+
+            return [
+                'status'    => true,
+                'message'   => 'Produto deletado com sucesso.',
+            ];
+        } catch (Exception $e) {
+            return [
+                'status'    => false,
+                'message'   => 'Falha ao deletar a produto',
                 'code'      => $e->getCode(),
                 'error'     => $e->getMessage()
             ];

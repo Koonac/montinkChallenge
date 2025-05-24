@@ -13,7 +13,7 @@ if (!empty($products)) {
         print_r($product);
         print '<br>';
 ?>
-
+        <a href="<?= Router::baseUrl('/produtos/' . $product['id']) ?>">Editar</a>
 <?php
     }
 }

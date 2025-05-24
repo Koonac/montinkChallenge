@@ -11,7 +11,7 @@
     ?>
     <h1>Alterando produto</h1>
 
-    <form class="row g-3" action="<?= Router::baseUrl('/produtos/' . $product['id'].'/atualizar') ?>" method="post">
+    <form class="row g-3" action="<?= Router::baseUrl('/produtos/' . $product['id'] . '/atualizar') ?>" method="post">
         <div class="col-md-6">
             <label for="name" class="form-label">Nome</label>
             <input type="text" class="form-control" id="name" name="name" value="<?= $product['name'] ?>">
@@ -41,10 +41,11 @@
                             if (!empty($product['variations'])) {
                                 foreach ($product['variations'] as $variation) {
                             ?>
-                                    <div class="d-flex">
-
-                                        <input type="text" class="form-control col-md-11" name="variations_edit[<?= $variation['id'] ?>]" value="<?= $variation['name'] ?>" placeholder="Nome da variação">
-                                        <input type="text" class="form-control col-md-1" name="stock_variations[<?= $variation['id'] ?>]" value="<?= $variation['quantity'] ?>">
+                                    <div class="d-flex" id="div-variation-<?= $variation['id'] ?>">
+                                        <input type="text" class="form-control" name="variations_edit[<?= $variation['id'] ?>]" value="<?= $variation['name'] ?>" placeholder="Nome da variação">
+                                        <input type="text" class="form-control" name="variations_price[<?= $variation['id'] ?>]" value="<?= $variation['price'] ?>">
+                                        <input type="text" class="form-control" name="variations_stock[<?= $variation['id'] ?>]" value="<?= $variation['quantity'] ?>">
+                                        <button type="button" class="btn btn-danger" onclick="deleteVariation(<?= $variation['id'] ?>)"><i class="bi bi-trash-fill"></i></button>
                                     </div>
                                 <?php
                                 }
