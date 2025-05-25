@@ -10,7 +10,7 @@ class OrderModel extends Database
     private $pdo;
 
     /**
-     * ProductModel Constructor
+     * OrderModel Constructor
      * 
      */
     public function __construct()
@@ -30,5 +30,57 @@ class OrderModel extends Database
         } else {
             return [];
         }
+    }
+
+    /**
+     * Cria um pedido
+     * 
+     * @param $attributes
+     * @return array
+     */
+    public function create($attributes): array
+    {
+        $sql = 'INSERT INTO orders 
+        (client_name, client_phone, total, sub_total, shipping_cost)
+        VALUES
+        (:clientName, :clientPhone, :total, :subTotal, :shippingCost);';
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            ':clientName'       => $attributes['clientName'],
+            ':clientPhone'      => $attributes['clientPhone'],
+            ':total'            => $attributes['total'],
+            ':subTotal'         => $attributes['subTotal'],
+            ':shippingCost'     => $attributes['shippingCost'],
+        ]);
+
+        return [
+            'id' => $this->pdo->lastInsertId(),
+            'message' => 'Pedido criado com sucesso.'
+        ];
+    }
+
+    /**
+     * Deleta um pedido
+     * 
+     * @param $id
+     * @return array
+     */
+    public function delete($id): array
+    {
+        $sql = 'DELETE 
+        FROM orders 
+        WHERE (id = :id);';
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            ':id' => $id
+        ]);
+
+        return [
+            'message' => 'Pedido deletado com sucesso.'
+        ];
     }
 }

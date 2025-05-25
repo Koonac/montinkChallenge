@@ -15,7 +15,6 @@ if (!empty($products)) {
 ?>
         <a class="btn btn-warning" href="<?= Router::baseUrl('/produtos/' . $product['id']) ?>">Editar</a>
         <button type="button" class="btn btn-danger" onclick="deleteProduct(<?= $product['id'] ?>)"><i class="bi bi-trash-fill"></i></button>
-        <button type="button" class="btn btn-success"><i class="bi bi-bag-fill"></i></button>
 <?php
         print '<br>';
     }

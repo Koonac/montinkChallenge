@@ -26,7 +26,7 @@
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Montink</a>
+            <a class="navbar-brand" href="<?= Router::baseUrl('/') ?>">Montink</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -46,7 +46,7 @@
                     </li>
                 </ul>
             </div>
-            <button type="button" class="btn btn-outline-primary"><i class="bi bi-cart-fill"></i></button>
+            <a class="btn btn-outline-primary" href="<?= Router::baseUrl('/carrinho') ?>"><i class="bi bi-cart-fill"></i></a>
         </div>
     </nav>
 
