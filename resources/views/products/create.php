@@ -7,7 +7,7 @@
         </div>
         <div class="col-md-6">
             <label for="price" class="form-label">Preço R$</label>
-            <input type="text" class="form-control mask-money" id="price" name="price" required>
+            <input type="text" class="form-control mask-money" id="price" name="price" value="0">
         </div>
         <div class="col-12">
             <label for="description" class="form-label">Descrição</label>
@@ -17,9 +17,9 @@
             <fieldset>
                 <legend>Variações</legend>
                 <div class="w-100 ">
-                    <div class="d-flex align-items-start gap-2">
+                    <div class="d-flex align-items-end gap-2">
                         <div>
-                            <button type="button" class="btn btn-secondary" id="product-new-variation"><i class="bi bi-plus-circle"></i></button>
+                            <button type="button" class="btn btn-montink" id="product-new-variation"><i class="bi bi-plus-circle"></i></button>
                         </div>
                         <div id="variation-container" class="d-flex flex-column w-100 gap-2">
                             <input type="text" class="form-control" name="variations[]" placeholder="Nome da variação">

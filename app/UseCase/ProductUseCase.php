@@ -13,9 +13,6 @@ class ProductUseCase
         try {
             $productModel = new ProductModel;
 
-            // MELHORAR ISSO
-            $attributes['price'] = Helpers::convertToUsd($attributes['price']);
-
             $productCreated = $productModel->create($attributes);
             $productId = $productCreated['id'];
 
@@ -71,10 +68,10 @@ class ProductUseCase
             if (isset($attributes['variations_edit']) && !empty($attributes['variations_edit'])) {
                 foreach ($attributes['variations_edit'] as $variationId => $variationName) {
                     $variations[] = [
-                        'variationId' => $variationId,
-                        'name' => $variationName,
-                        'price' => $attributes['variations_price'][$variationId],
-                        'quantity' => $attributes['variations_stock'][$variationId],
+                        'variationId'   => $variationId,
+                        'name'          => $variationName,
+                        'price'         => Helpers::convertToUsd($attributes['variations_price'][$variationId]),
+                        'quantity'      => $attributes['variations_stock'][$variationId],
                     ];
                 }
 

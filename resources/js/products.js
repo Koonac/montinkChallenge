@@ -33,7 +33,7 @@ function deleteProduct(productId){
         console.log('Recurso deletado com sucesso:', data);
 
         // REMOVENDO DIV
-        document.getElementById('div-product-' + productId).remove();
+        document.getElementById('row-product-' + productId).remove();
     })
     .catch(error => {
         console.error('Erro:', error);
@@ -54,7 +54,7 @@ function deleteVariation(variationId){
         console.log(data);
 
         // REMOVENDO DIV
-        document.getElementById('div-variation-' + variationId).remove();
+        document.getElementById('row-variation-' + variationId).remove();
     })
     .catch(error => {
         console.error('Erro:', error);

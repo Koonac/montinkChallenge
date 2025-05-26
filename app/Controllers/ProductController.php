@@ -51,19 +51,24 @@ class ProductController extends RenderView
     public function store()
     {
         $form = $_POST;
+        $form['price'] = Helpers::convertToUsd($form['price']);
+
+        if (empty($form['name'])) {
+            Notification::flash('Preencha os campos obrigatórios', 'warning');
+            header("Location: " . Router::baseUrl('/produtos/criar'));
+            exit;
+        }
 
         $product = new ProductUseCase;
         $data = $product->create($form);
 
-        if ($data['status']) {
-            header("Location: " . Router::baseUrl('/produtos'));
-            exit;
-        }
+        ($data['status'])
+            ? Notification::flash($data['message'], 'success')
+            : Notification::flash($data['message'] . "\n" . $data['error'], 'danger');
 
-        $this->loadView('products/create', [
-            'title' => 'Criar um produto',
-            'data'  => $data
-        ]);
+
+        header("Location: " . Router::baseUrl('/produtos'));
+        exit;
     }
 
     /**
@@ -75,11 +80,23 @@ class ProductController extends RenderView
     public function update($request)
     {
         $form = $_POST;
+        $form['price'] = Helpers::convertToUsd($form['price']);
+
+        if (empty($form['name'])) {
+            Notification::flash('Preencha os campos obrigatórios', 'warning');
+            header("Location: " . Router::baseUrl('/produtos/' . $request['id']));
+            exit;
+        }
 
         $product = new ProductUseCase;
         $data = $product->update($request['id'], $form);
 
+        ($data['status'])
+            ? Notification::flash($data['message'], 'success')
+            : Notification::flash($data['message'] . "\n" . $data['error'], 'danger');
+
         header("Location: " . Router::baseUrl('/produtos/' . $request['id']));
+        exit;
     }
 
     /**

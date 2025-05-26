@@ -56,7 +56,13 @@
     </nav>
 
     <!-- Renderiza o conteúdo da view específica -->
-    <div class="container-fluid pt-4">
+    <div class="container-fluid p-3 pt-4">
+        <?php if ($flash = Notification::getFlash()): ?>
+            <div class="alert alert-<?= $flash['type'] ?>">
+                <?= htmlspecialchars($flash['message']) ?>
+            </div>
+        <?php endif; ?>
+
         <?= $content ?>
     </div>
 
