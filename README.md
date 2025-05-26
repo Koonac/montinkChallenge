@@ -32,8 +32,23 @@ Este projeto é um mini ERP desenvolvido com PHP puro, utilizando o padrão MVC,
 
 1. Clone este repositório:
 ```bash
-git clone https://github.com/seu-usuario/nome-do-repositorio.git
+git clone https://github.com/Koonac/montinkChallenge.git
 ```
 2. Importe o banco de dados (arquivo `montink_erp_challenge.sql` incluso no repositório).
 3. Configure a conexão com o banco no arquivo `config.php`.
 4. Acesse `http://localhost/montinkChallenge/` no navegador.
+
+---
+
+## 🔮 Funcionalidades Futuras (não implementadas ainda)
+
+- Tela de gerenciamento de cupons com regras de validade e valor mínimo.
+- Envio de e-mail de confirmação ao finalizar o pedido.
+- Criação de um webhook para atualizar ou excluir pedidos via API externa.
+
+---
+
+## 📌 Considerações Finais
+
+Este projeto tem foco em funcionalidade e organização de código. A parte visual é simples, mas responsiva com Bootstrap. O código foi escrito com preocupação em manter a separação de responsabilidades e facilidade de manutenção.
+
