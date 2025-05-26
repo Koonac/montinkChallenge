@@ -44,8 +44,11 @@ git clone https://github.com/Koonac/montinkChallenge.git
 
 - Tela de gerenciamento de cupons com regras de validade e valor mínimo.
 - Envio de e-mail de confirmação ao finalizar o pedido.
-- Criação de um webhook para atualizar ou excluir pedidos via API externa.
-
+- Criação de um webhook para atualizar ou excluir pedidos via API externa. ✅(feito)
+  - Webhook implementado na rota
+```http
+POST /pedidos/webhook
+```
 ---
 
 ## 📌 Considerações Finais
