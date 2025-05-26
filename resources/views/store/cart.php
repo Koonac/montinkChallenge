@@ -60,15 +60,23 @@
             </tbody>
         </table>
     </div>
-    <div class="row g-1">
-        <div class="col-md-4">
-            <input type="text" name="clientName" class="form-control" placeholder="Nome" required>
+    <div class="d-flex flex-column gap-2">
+        <div class="row g-1">
+            <div class="col-md-3">
+                <input type="text" name="clientName" class="form-control" placeholder="Nome" required>
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="clientPhone" class="form-control" placeholder="Telefone" required>
+            </div>
         </div>
-        <div class="col-md-4">
-            <input type="text" name="clientPhone" class="form-control" placeholder="Telefone" required>
-        </div>
-        <div class="col-md-4">
-            <input type="text" name="clientCep" class="form-control" placeholder="Cep" required>
+        <div class="row g-2 align-items-center">
+            <div class="col-md-2">
+                <input type="text" name="clientCep" class="form-control mask-cep" placeholder="Cep" onchange="fetchViaCep(this)" required>
+            </div>
+            <div class="col-md-10">
+                <div class="text-white-50" id="container-cep">
+                </div>
+            </div>
         </div>
     </div>
     <div class="d-flex flex-column pt-2 justify-content-end align-items-end">

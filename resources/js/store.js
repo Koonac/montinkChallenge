@@ -1,3 +1,39 @@
+async function fetchViaCep(fieldCep) {
+    const cep = fieldCep.value.replace(/-/g, '');
+    const containerCep = document.getElementById('container-cep');
+
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    if(cep.length == 8){
+        containerCep.innerHTML = `<div class="spinner-border spinner-border-sm" role="status" >
+            <span class="visually-hidden">Loading...</span>
+        </div>`;
+
+        fetch('https://viacep.com.br/ws/' + fieldCep.value + '/json/', options)
+            .then(response => {
+                if (!response.ok) {
+                    console.error(response);
+                    throw new Error('Erro na requisição: ' + response.status);
+                }
+                return response.json();
+            }).then(data => {
+                if(data.erro){
+                    containerCep.innerHTML = 'CEP não encontrado ou inválido'
+                }else{
+                    containerCep.innerHTML = 'CEP válido.'
+                }
+                console.log(data)
+            }).catch(erro => {
+                console.error('Erro na API:', erro.message);
+            });
+    }
+}
+
 async function fetchCart(path, method = 'GET', dados = null) {
     const options = {
         method,

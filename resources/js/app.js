@@ -1,5 +1,4 @@
 const moneyInputs = document.querySelectorAll('.mask-money');
-
 moneyInputs.forEach(input => {
     IMask(input, {
         mask: 'R$ num',
@@ -11,6 +10,13 @@ moneyInputs.forEach(input => {
             mapToRadix: ['.']
         }
         }
+    });
+});
+
+const cepInputs = document.querySelectorAll('.mask-cep');
+cepInputs.forEach(input => {
+    IMask(input, {
+        mask: '00000-000'
     });
 });
 
