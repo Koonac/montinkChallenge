@@ -69,4 +69,56 @@ class StockModel extends Database
             'message' => 'Estoque atualizado com sucesso.'
         ];
     }
+
+    /**
+     * Incrementa um valor ao estoque
+     * 
+     * @param $productId
+     * @param $attributes
+     * @return array
+     */
+    public function incrementByProduct($productId, $attributes): array
+    {
+        $sql = 'UPDATE stocks SET 
+        quantity = quantity + :quantity
+        WHERE
+        (product_id = :productId);';
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            ':productId'    => $productId,
+            ':quantity'     => $attributes['quantity'],
+        ]);
+
+        return [
+            'message' => 'Estoque atualizado com sucesso.'
+        ];
+    }
+
+    /**
+     * Decrementa um valor ao estoque
+     * 
+     * @param $productId
+     * @param $attributes
+     * @return array
+     */
+    public function decrementByProduct($productId, $attributes): array
+    {
+        $sql = 'UPDATE stocks SET 
+        quantity = quantity - :quantity
+        WHERE
+        (product_id = :productId);';
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            ':productId'    => $productId,
+            ':quantity'     => $attributes['quantity'],
+        ]);
+
+        return [
+            'message' => 'Estoque atualizado com sucesso.'
+        ];
+    }
 }

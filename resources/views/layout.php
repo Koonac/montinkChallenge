@@ -51,7 +51,16 @@
                     </li>
                 </ul>
             </div>
-            <a class="btn btn-dark d-none d-lg-block text-white-50" href="<?= Router::baseUrl('/carrinho') ?>"><i class="bi bi-cart-fill"></i></a>
+
+            <a class="btn btn-dark d-none d-lg-block text-white-50 position-relative" href="<?= Router::baseUrl('/carrinho') ?>">
+                <i class="bi bi-cart-fill"></i>
+                <?php if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) : ?>
+                    <span class="position-absolute top-100 start-0 translate-middle badge rounded-pill bg-danger">
+                        <?= count($_SESSION['cart']) ?>
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                <?php endif; ?>
+            </a>
         </div>
     </nav>
 

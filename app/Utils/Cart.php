@@ -1,7 +1,17 @@
 <?php
 
-class StoreUseCase
+class Cart
 {
+    /**
+     * Inicializa o carrinho se ainda não existir.
+     */
+    public function __construct()
+    {
+        if (!isset($_SESSION['cart'])) {
+            $_SESSION['cart'] = [];
+        }
+    }
+
     /**
      * Adiciona um produto ao carrinho.
      *
@@ -11,14 +21,20 @@ class StoreUseCase
     public function add($product, $quantityCart): array
     {
         try {
-            $cart = new Cart;
-            $cart->add($product, $quantityCart);
+            $addedProduct = false;
 
-            $stockModel = new StockModel;
-            $stockModel->decrementByProduct($product['id'], [
-                'quantity' => $quantityCart
-            ]);
+            foreach ($_SESSION['cart'] as &$cartProduct) {
+                if ($cartProduct['id'] == $product['id']) {
+                    $cartProduct['quantityCart'] += $quantityCart;
+                    $addedProduct = true;
+                    break;
+                }
+            }
 
+            if (!$addedProduct) {
+                $product['quantityCart'] = $quantityCart;
+                $_SESSION['cart'][] = $product;
+            }
             return [
                 'status'    => true,
                 'message'   => 'Produto adicionado ao carrinho com sucesso.',
@@ -42,18 +58,13 @@ class StoreUseCase
     public function remove($id): array
     {
         try {
-            $cart = new Cart;
-            $find = $cart->find($id);
-            $product = $find['product'];
-
-            if (!empty($product)) {
-                $stockModel = new StockModel;
-                $stockModel->incrementByProduct($id, [
-                    'quantity' => $product['quantityCart'] ?? 0
-                ]);
+            foreach ($_SESSION['cart'] as $index => $item) {
+                if ($item['id'] == $id) {
+                    unset($_SESSION['cart'][$index]);
+                    $_SESSION['cart'] = array_values($_SESSION['cart']);
+                    break;
+                }
             }
-
-            $cart->remove($id);
 
             return [
                 'status'    => true,
@@ -70,7 +81,7 @@ class StoreUseCase
     }
 
     /**
-     * Decrementa uma quantidade de um determinado produto no carrinho
+     * Decrementa uma unidade a quantidade de um produto no carrinho.
      *
      * @param $id
      * @return array
@@ -78,16 +89,16 @@ class StoreUseCase
     public function decrementQuantityCart($id): array
     {
         try {
-            $cart = new Cart;
-            $cart->decrementQuantityCart($id);
+            foreach ($_SESSION['cart'] as &$item) {
+                if ($item['id'] == $id) {
+                    $item['quantityCart'] = $item['quantityCart'] - 1;
+                    break;
+                }
+            }
 
-            $stockModel = new StockModel;
-            $stockModel->incrementByProduct($id, [
-                'quantity' => 1
-            ]);
             return [
                 'status'    => true,
-                'message'   => 'Quantidade decrementada com sucesso.',
+                'message'   => 'Quantidade atualizada com sucesso.',
             ];
         } catch (Exception $e) {
             return [
@@ -100,7 +111,7 @@ class StoreUseCase
     }
 
     /**
-     * Incrementa uma quantidade de um determinado produto no carrinho
+     * Incrementa uma unidade a quantidade de um produto no carrinho.
      *
      * @param $id
      * @return array
@@ -108,16 +119,16 @@ class StoreUseCase
     public function incrementQuantityCart($id): array
     {
         try {
-            $cart = new Cart;
-            $cart->incrementQuantityCart($id);
+            foreach ($_SESSION['cart'] as &$item) {
+                if ($item['id'] == $id) {
+                    $item['quantityCart'] = $item['quantityCart'] + 1;
+                    break;
+                }
+            }
 
-            $stockModel = new StockModel;
-            $stockModel->decrementByProduct($id, [
-                'quantity' => 1
-            ]);
             return [
                 'status'    => true,
-                'message'   => 'Quantidade incrementada com sucesso.',
+                'message'   => 'Quantidade atualizada com sucesso.',
             ];
         } catch (Exception $e) {
             return [
@@ -137,16 +148,42 @@ class StoreUseCase
     public function all(): array
     {
         try {
-            $cart = new Cart;
-            $allProducts = $cart->all();
-
-            $data = [
-                'cart' => $allProducts['cart']
+            return [
+                'status'    => true,
+                'cart'      => $_SESSION['cart'],
+                'message'   => 'Produtos do carrinho listados com sucesso.',
             ];
+        } catch (Exception $e) {
+            return [
+                'status'    => false,
+                'message'   => 'Falha ao listar produtos do carrinho',
+                'code'      => $e->getCode(),
+                'error'     => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Retorna um item do carrinho.
+     *
+     * @return array.
+     */
+    public function find($id): array
+    {
+        try {
+            $product = [];
+            if (($_SESSION['cart']) > 0) {
+                foreach ($_SESSION['cart'] as &$item) {
+                    if ($item['id'] == $id) {
+                        $product = $item;
+                        break;
+                    }
+                }
+            }
 
             return [
                 'status'    => true,
-                'data'      => $data,
+                'product'   => $product,
                 'message'   => 'Produtos do carrinho listados com sucesso.',
             ];
         } catch (Exception $e) {
@@ -167,19 +204,7 @@ class StoreUseCase
     public function clear(): array
     {
         try {
-            $cart = new Cart;
-            $allProducts = $cart->all();
-
-            if (($allProducts['cart']) > 0) {
-                $stockModel = new StockModel;
-                foreach ($allProducts['cart'] as $product) {
-                    $stockModel->incrementByProduct($product['id'], [
-                        'quantity' => $product['quantityCart']
-                    ]);
-                }
-            }
-
-            $cart->clear();
+            unset($_SESSION['cart']);
 
             return [
                 'status'    => true,
@@ -203,19 +228,21 @@ class StoreUseCase
     public function getTotal(): array
     {
         try {
-            $cart = new Cart;
-            $totalCart = $cart->getTotal();
+            $subTotal = 0.0;
+            foreach ($_SESSION['cart'] as $item) {
+                $subTotal += $item['price'] * $item['quantityCart'];
+            }
 
-            $data = [
-                'shippingFee'   => $totalCart['shippingFee'],
-                'subTotal'      => $totalCart['subTotal'],
-                'total'         => $totalCart['total'],
-            ];
+            $shippingFee = $this->getShippingFee($subTotal);
+
+            $total = $subTotal + $shippingFee;
 
             return [
-                'status'    => true,
-                'message'   => 'Total do carrinho calculado com sucesso.',
-                'data'      => $data,
+                'status'        => true,
+                'message'       => 'Total do carrinho calculado com sucesso.',
+                'shippingFee'   => $shippingFee,
+                'subTotal'      => $subTotal,
+                'total'         => $total
             ];
         } catch (Exception $e) {
             return [
@@ -225,5 +252,28 @@ class StoreUseCase
                 'error'     => $e->getMessage()
             ];
         }
+    }
+
+    /**
+     * Calcula o valor de frete.
+     *
+     * @param float $subTotal
+     * @return float
+     */
+    private function getShippingFee($subTotal): float
+    {
+        $shippingFee = 0;
+
+        if ($subTotal < 52) {
+            $shippingFee = 20;
+        } else if ($subTotal <= 166.59) {
+            $shippingFee = 15;
+        } else if ($subTotal <= 200) {
+            $shippingFee = 20;
+        } else {
+            $shippingFee = 0;
+        }
+
+        return $shippingFee;
     }
 }

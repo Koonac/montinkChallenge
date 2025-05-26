@@ -34,15 +34,15 @@ form {
     color: #f8f9fa;
     border-radius: 0.5rem;
 }
-form .form-control {
+.form-control {
     background-color: #343a40;
     color: #f8f9fa;
     border: 1px solid #6c757d;
 }
-form .form-control::placeholder {
+.form-control::placeholder {
     color: #ced4da;
 }
-form .form-control:focus {
+.form-control:focus {
   background-color: #343a40;
   color: #f8f9fa;           
   border-color: #adb5bd;    

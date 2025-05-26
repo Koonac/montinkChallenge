@@ -66,7 +66,8 @@ class ProductModel extends Database
         LEFT JOIN variations ON products.id = variations.variation_id
         LEFT JOIN products AS parents_products ON variations.parent_product_id = parents_products.id
         WHERE
-        NOT EXISTS (SELECT 1 FROM variations WHERE variations.parent_product_id = products.id);';
+        NOT EXISTS (SELECT 1 FROM variations WHERE variations.parent_product_id = products.id)
+        ORDER BY full_name;';
 
         $stmt = $this->pdo->query($sql);
         if ($stmt->rowCount() > 0) {

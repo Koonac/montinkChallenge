@@ -8,7 +8,6 @@ if (!empty($productsCart)) {
 ?>
         <div class="d-flex gap-2">
             <?= print_r($product); ?>
-            <input type="number" id="quantity-cart-<?= $product['id'] ?>" class="form-control" value="<?= $product['quantityCart'] ?>" onchange="updateQuantityCart(<?= $product['id'] ?>)">
             <button type="button" class="btn btn-danger padding-2" onclick="decrementQuantityCart(<?= $product['id'] ?>)">-</button>
             <button type="button" class="btn btn-success padding-2" onclick="incrementQuantityCart(<?= $product['id'] ?>)">+</button>
             <button type="button" class="btn btn-danger" onclick="removeCart(<?= $product['id'] ?>)"><i class="bi bi-trash-fill"></i></button>

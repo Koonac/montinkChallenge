@@ -11,6 +11,7 @@ async function fetchCart(path, method = 'GET', dados = null) {
     return fetch('http://localhost/montinkChallenge/carrinho' + path, options)
         .then(response => {
             if (!response.ok) {
+                console.error(response);
                 throw new Error('Erro na requisição: ' + response.status);
             }
             return response.json();
@@ -18,15 +19,21 @@ async function fetchCart(path, method = 'GET', dados = null) {
 }
 
 function addCart(productId){
-    var dadosJson = document.getElementById('json-product-' + productId).value;
+    var dadosJson = document.getElementById('json-product-' + productId);
+    var quantityCart = document.getElementById('quantity-cart-' + productId);
 
-    fetchCart('/adicionar', 'POST', JSON.parse(dadosJson))
+    const body = {
+        product: JSON.parse(dadosJson.value),
+        quantityCart: quantityCart.value
+    }
+
+    fetchCart('/adicionar', 'POST', body)
         .then(data => {
             if (data.status) {
-                alert('Produto adicionado!');
-                // opcional: atualizar contador do carrinho
+                alert('Produto adicionado ao carrinho!');
+                quantityCart.value = 1;
             } else {
-                alert('Erro: ' + (data.erro || 'Desconhecido'));
+                alert('Ocorreu um erro inesperado');
             }
         })
         .catch(erro => {
@@ -43,83 +50,57 @@ function removeCart(productId){
     fetchCart('/remover', 'POST', body)
         .then(data => {
             if (data.status) {
-                alert('Produto adicionado!');
-                // opcional: atualizar contador do carrinho
+                alert('Produto removido!');
             } else {
-                alert('Erro: ' + (data.erro || 'Desconhecido'));
+                alert('Ocorreu um erro inesperado');
+                console.error('Erro na API:', JSON.stringify(data));
             }
         })
         .catch(erro => {
-            console.error('Erro na API:', erro);
-            alert('Falha de comunicação com o servidor.');
-        });
-}
-
-function updateQuantityCart(productId){
-    var quantityCart = document.getElementById('quantity-cart-' + productId).value
-
-    const body = {
-        productId: productId,
-        quantityCart: quantityCart
-    }
-
-    fetchCart('/atualizar_quantidade', 'POST', body)
-        .then(data => {
-            if (data.status) {
-                alert('Produto adicionado!');
-                // opcional: atualizar contador do carrinho
-            } else {
-                alert('Erro: ' + (data.erro || 'Desconhecido'));
-            }
-        })
-        .catch(erro => {
-            console.error('Erro na API:', erro);
+            console.error('Erro na API:', JSON.stringify(erro.message));
             alert('Falha de comunicação com o servidor.');
         });
 }
 
 function decrementQuantityCart(productId){
-    var quantityCart = document.getElementById('quantity-cart-' + productId).value
-
     const body = {
         productId: productId,
-        quantityCart: Number(quantityCart) - 1 
     }
 
-    fetchCart('/atualizar_quantidade', 'POST', body)
+    fetchCart('/decrementa', 'POST', body)
         .then(data => {
             if (data.status) {
-                alert('Produto adicionado!');
+                alert('Quantidade decrementada com sucesso');
                 // opcional: atualizar contador do carrinho
             } else {
-                alert('Erro: ' + (data.erro || 'Desconhecido'));
+                alert('Ocorreu um erro inesperado');
+                console.error('Erro na API:', JSON.stringify(data));
             }
         })
         .catch(erro => {
-            console.error('Erro na API:', erro);
+            console.error('Erro na API:', JSON.stringify(erro));
             alert('Falha de comunicação com o servidor.');
         });
 }
 
 function incrementQuantityCart(productId){
-    var quantityCart = document.getElementById('quantity-cart-' + productId).value
 
     const body = {
         productId: productId,
-        quantityCart: Number(quantityCart) + 1 
     }
 
-    fetchCart('/atualizar_quantidade', 'POST', body)
+    fetchCart('/incrementa', 'POST', body)
         .then(data => {
             if (data.status) {
-                alert('Produto adicionado!');
+                alert('Quantidade incrementada com sucesso');
                 // opcional: atualizar contador do carrinho
             } else {
-                alert('Erro: ' + (data.erro || 'Desconhecido'));
+                alert('Ocorreu um erro inesperado');
+                console.error('Erro na API:', JSON.stringify(data));
             }
         })
         .catch(erro => {
-            console.error('Erro na API:', erro);
+            console.error('Erro na API:', JSON.stringify(erro));
             alert('Falha de comunicação com o servidor.');
         });
 }
@@ -129,14 +110,15 @@ function clearCart(){
     fetchCart('/limpar', 'POST')
         .then(data => {
             if (data.status) {
-                alert('Produto adicionado!');
+                alert('Todos os produtos do carrinho foram removidos.');
                 // opcional: atualizar contador do carrinho
             } else {
-                alert('Erro: ' + (data.erro || 'Desconhecido'));
+                alert('Ocorreu um erro inesperado');
+                console.error('Erro na API:', JSON.stringify(data));
             }
         })
         .catch(erro => {
-            console.error('Erro na API:', erro);
+            console.error('Erro na API:', JSON.stringify(erro));
             alert('Falha de comunicação com o servidor.');
         });
 }

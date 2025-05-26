@@ -45,7 +45,7 @@ class StoreController extends RenderView
         $data = json_decode(file_get_contents('php://input'), true);
 
         $storeUseCase = new StoreUseCase;
-        $response = $storeUseCase->add($data);
+        $response = $storeUseCase->add($data['product'], $data['quantityCart']);
 
         echo json_encode($response);
     }
@@ -67,17 +67,33 @@ class StoreController extends RenderView
     }
 
     /**
-     * Atualiza quantidade de um determinado produto no carrinho
+     * Decrementa uma quantidade de um determinado produto no carrinho
      *
      * @return json
      */
-    public function updateQuantityCart()
+    public function decrementQuantityCart()
     {
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents('php://input'), true);
 
         $storeUseCase = new StoreUseCase;
-        $response = $storeUseCase->updateQuantity($data['productId'], $data['quantityCart']);
+        $response = $storeUseCase->decrementQuantityCart($data['productId']);
+
+        echo json_encode($response);
+    }
+
+    /**
+     * Incrementa uma quantidade de um determinado produto no carrinho
+     *
+     * @return json
+     */
+    public function incrementQuantityCart()
+    {
+        header('Content-Type: application/json');
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $storeUseCase = new StoreUseCase;
+        $response = $storeUseCase->incrementQuantityCart($data['productId']);
 
         echo json_encode($response);
     }
