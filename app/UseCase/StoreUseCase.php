@@ -11,10 +11,16 @@ class StoreUseCase
     public function add($product, $quantityCart): array
     {
         try {
+            $stockModel = new StockModel;
+            $productStock = Helpers::keysToCamelCase($stockModel->findByProduct($product['id']));
+
+            if ($quantityCart > $productStock['quantity']) {
+                $quantityCart = $productStock['quantity'];
+            }
+
             $cart = new Cart;
             $cart->add($product, $quantityCart);
 
-            $stockModel = new StockModel;
             $stockModel->decrementByProduct($product['id'], [
                 'quantity' => $quantityCart
             ]);
@@ -79,12 +85,22 @@ class StoreUseCase
     {
         try {
             $cart = new Cart;
-            $cart->decrementQuantityCart($id);
+            $find = $cart->find($id);
+            $product = $find['product'];
 
-            $stockModel = new StockModel;
-            $stockModel->incrementByProduct($id, [
-                'quantity' => 1
-            ]);
+            if (!empty($product)) {
+                if ($product['quantityCart'] > 1) {
+                    $cart->decrementQuantityCart($id);
+                } else {
+                    $cart->remove($id);
+                }
+
+                $stockModel = new StockModel;
+                $stockModel->incrementByProduct($id, [
+                    'quantity' => 1
+                ]);
+            }
+
             return [
                 'status'    => true,
                 'message'   => 'Quantidade decrementada com sucesso.',
@@ -109,12 +125,24 @@ class StoreUseCase
     {
         try {
             $cart = new Cart;
-            $cart->incrementQuantityCart($id);
+            $find = $cart->find($id);
+            $product = $find['product'];
 
-            $stockModel = new StockModel;
-            $stockModel->decrementByProduct($id, [
-                'quantity' => 1
-            ]);
+            if (!empty($product)) {
+                $stockModel = new StockModel;
+                $productStock = Helpers::keysToCamelCase($stockModel->findByProduct($id));
+
+                if ($productStock['quantity'] <= 0) {
+                    throw new Exception('Estoque insuficiente');
+                }
+
+                $cart->incrementQuantityCart($id);
+
+                $stockModel->decrementByProduct($id, [
+                    'quantity' => 1
+                ]);
+            }
+
             return [
                 'status'    => true,
                 'message'   => 'Quantidade incrementada com sucesso.',

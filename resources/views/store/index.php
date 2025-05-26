@@ -13,7 +13,7 @@
                         <p class="card-text text-white-50"><?= $product['description'] ?></p>
                     </div>
                     <div class="card-body d-flex align-items-end bg-transparent">
-                        <p class="card-text"><small class="text-secondary">Disponivel: <?= $product['quantity'] ?></small></p>
+                        <p class="card-text"><small class="text-secondary" id="quantity-available-<?= $product['id'] ?>">Disponivel: <?= $product['quantity'] ?></small></p>
                     </div>
                     <div class="card-footer bg-transparent">
                         <div class="d-flex align-items-center gap-2">

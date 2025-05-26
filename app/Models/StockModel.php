@@ -19,6 +19,29 @@ class StockModel extends Database
     }
 
     /**
+     * Captura um estoque
+     * 
+     * @param $productId
+     * @param $attributes
+     * @return array
+     */
+    public function findByProduct($productId): array
+    {
+        $sql = "SELECT * 
+        FROM
+        stocks
+        WHERE
+        (product_id = $productId);";
+
+        $stmt = $this->pdo->query($sql);
+
+        if ($stmt->rowCount() > 0) {
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return [];
+        }
+    }
+    /**
      * Cria um estoque
      * 
      * @param $attributes
