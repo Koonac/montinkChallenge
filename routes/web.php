@@ -20,6 +20,7 @@ $routesWeb = [
         '/produtos' => 'ProductController@store',
         '/produtos/{id}/atualizar' => 'ProductController@update',
         '/pedidos/comprar' => 'OrderController@store',
+        '/pedidos/webhook' => 'OrderController@webhook',
     ],
     'DELETE' => [
         '/produtos/{id}' => 'ProductController@delete',

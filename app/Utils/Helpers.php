@@ -73,4 +73,41 @@ class Helpers
 
         return number_format($floatValue, 2, '.', '');
     }
+
+    /**
+     * Converte o status de um pedido
+     *
+     * @param $status
+     * @return bool
+     */
+    public static function orderStatusExists($status): bool
+    {
+        $orderStatus = ['created', 'approved', 'shipped', 'delivered', 'cancelled'];
+
+        return in_array($status, $orderStatus);
+    }
+
+    /**
+     * Converte o status de um pedido
+     *
+     * @param $status
+     * @return string|null
+     */
+    public static function orderStatusParser($status): string | null
+    {
+        switch ($status) {
+            case 'created':
+                return 'Criado';
+            case 'approved':
+                return 'Aprovado';
+            case 'shipped':
+                return 'Enviado';
+            case 'delivered':
+                return 'Entregue';
+            case 'cancelled':
+                return 'Cancelado';
+            default:
+                return null;
+        }
+    }
 }

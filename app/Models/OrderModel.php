@@ -33,6 +33,21 @@ class OrderModel extends Database
     }
 
     /**
+     * Retorna um determinado pedido
+     * 
+     * @param $id
+     */
+    public function find($id)
+    {
+        $stmt = $this->pdo->query("SELECT * FROM orders WHERE id = $id");
+        if ($stmt->rowCount() > 0) {
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return [];
+        }
+    }
+
+    /**
      * Cria um pedido
      * 
      * @param $attributes
@@ -58,6 +73,32 @@ class OrderModel extends Database
         return [
             'id' => $this->pdo->lastInsertId(),
             'message' => 'Pedido criado com sucesso.'
+        ];
+    }
+
+    /**
+     * Atualiza o status de um pedido
+     * 
+     * @param $id
+     * @param $status
+     * @return void
+     */
+    public function updateStatus($id, $status): array
+    {
+        $sql = 'UPDATE orders 
+        SET status = :status
+        WHERE
+        id = :id;';
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            ':id' => $id,
+            ':status' => $status,
+        ]);
+
+        return [
+            'message' => 'Status do pedido alterado com sucesso.'
         ];
     }
 

@@ -13,6 +13,7 @@
                 </h2>
                 <div id="order-<?= $order['id'] ?>" class="accordion-collapse collapse bg-dark text-white" data-bs-parent="#accordionOrders">
                     <div class="accordion-body">
+                        <p><strong>Status:</strong> <?= Helpers::orderStatusParser($order['status']) ?></p>
                         <p><strong>Nome:</strong> <?= $order['clientName'] ?></p>
                         <p><strong>Telefone:</strong> <?= $order['clientPhone'] ?></p>
                         <p><strong>Total:</strong> R$ <?= Helpers::convertToReal($order['total']) ?></p>

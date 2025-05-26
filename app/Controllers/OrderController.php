@@ -33,7 +33,23 @@ class OrderController extends RenderView
             header("Location: " . Router::baseUrl('/pedidos'));
             exit;
         }
+    }
 
-        printDie($data);
+    /**
+     * Processa o payload de webhook de pedidos.
+     *
+     * @return json
+     */
+    public function webhook()
+    {
+        header('Content-Type: application/json');
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $orderUseCase = new OrderUseCase;
+        $response = $orderUseCase->webhook($data);
+
+        if (!$response['status']) http_response_code($response['code']);
+
+        echo json_encode($response);
     }
 }
