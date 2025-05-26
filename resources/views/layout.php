@@ -22,11 +22,13 @@
 
 </head>
 
-<body>
+<body class="bg-dark text-white">
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-montink">
         <div class="container-fluid">
-            <a class="navbar-brand" href="<?= Router::baseUrl('/') ?>">Montink</a>
+            <a class="navbar-brand" href="<?= Router::baseUrl('/') ?>">
+                <img src="https://sou.montink.com/wp-content/uploads/2024/04/logo.png" width="150" height="35" alt="Logo montink">
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -44,17 +46,25 @@
                     <li class="nav-item">
                         <a class="nav-link <?= str_contains(Router::getPath(), 'pedidos') ? 'active' : '' ?>" href="<?= Router::baseUrl('/pedidos') ?>">Pedidos</a>
                     </li>
+                    <li class="nav-item border-top">
+                        <a class="nav-link d-block d-lg-none <?= str_contains(Router::getPath(), 'carrinho') ? 'active' : '' ?>" href="<?= Router::baseUrl('/carrinho') ?>">Carrinho</a>
+                    </li>
                 </ul>
             </div>
-            <a class="btn btn-outline-primary" href="<?= Router::baseUrl('/carrinho') ?>"><i class="bi bi-cart-fill"></i></a>
+            <a class="btn btn-dark d-none d-lg-block text-white-50" href="<?= Router::baseUrl('/carrinho') ?>"><i class="bi bi-cart-fill"></i></a>
         </div>
     </nav>
 
     <!-- Renderiza o conteúdo da view específica -->
-    <?= $content ?>
+    <div class="container-fluid pt-4">
+        <?= $content ?>
+    </div>
 
     <!-- BOOTSTRAP JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+
+    <!-- IMASK -->
+    <script src="https://unpkg.com/imask"></script>
 
     <!-- Importa todos os JS automaticamente -->
     <?php

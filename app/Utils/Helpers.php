@@ -41,4 +41,36 @@ class Helpers
     {
         return array_map([self::class, 'keysToCamelCase'], $list);
     }
+
+    /**
+     * Converte um valor americano para brasileiro
+     *
+     * @param $usdValue
+     * @return string
+     */
+    public static function convertToReal($usdValue): string
+    {
+        $cleanValue = preg_replace('/[^0-9.]/', '', $usdValue);
+
+        $floatValue = floatval($cleanValue);
+
+        return number_format($floatValue, 2, ',', '.');
+    }
+
+    /**
+     * Converte um valor brasileiro para americano
+     *
+     * @param $brlValue
+     * @return string
+     */
+    public static function convertToUsd($brlValue): string
+    {
+        $cleanValue = str_replace(['R$', ' ', '.'], '', $brlValue);
+
+        $cleanValue = str_replace(',', '.', $cleanValue);
+
+        $floatValue = floatval($cleanValue);
+
+        return number_format($floatValue, 2, '.', '');
+    }
 }

@@ -1,0 +1,46 @@
+
+.bg-montink {
+    background-color: #00b7b1 !important;
+}
+
+.text-montink {
+    color: #00b7b1;
+}
+
+.btn-montink {
+    background-color: #00b7b1;
+    color: #292929;
+}
+
+.btn-montink:hover {
+    border-style: solid;
+    border-color: #00b7b1;
+    color:rgba(255, 255, 255, 0.7);
+}
+
+form {
+    background-color: #212529; /* mesma cor de bg-dark */
+    color: #f8f9fa; /* mesma cor de text-light */
+    border-radius: 0.5rem;
+}
+
+form .form-control {
+    background-color: #343a40; /* tom escuro para inputs */
+    color: #f8f9fa;
+    border: 1px solid #6c757d; /* equivalente a border-secondary */
+}
+
+form .form-control::placeholder {
+    color: #ced4da; /* cor suave para placeholders */
+}
+
+form .form-control:focus {
+  background-color: #343a40; /* mantém o fundo escuro */
+  color: #f8f9fa;            /* mantém o texto claro */
+  border-color: #adb5bd;     /* cor da borda ao focar */
+  box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, 0.25); /* efeito leve */
+}
+
+form label {
+    color: #f8f9fa;
+}

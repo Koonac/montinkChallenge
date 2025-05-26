@@ -12,6 +12,10 @@ class ProductUseCase
     {
         try {
             $productModel = new ProductModel;
+
+            // MELHORAR ISSO
+            $attributes['price'] = Helpers::convertToUsd($attributes['price']);
+
             $productCreated = $productModel->create($attributes);
             $productId = $productCreated['id'];
 
